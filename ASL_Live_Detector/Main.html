@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <!-- Load TensorFlow.js for tfjs-node -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <head>
+        <title>ASL Live Detector</title>
+    </head>
+    <body>
+        <script>
+            //Extract Correct Data from Dataset
+            function extractData(obj) {
+
+            }
+            function removeData(obj) {
+
+            }
+
+            //Creates a ml model
+            function createModel() {
+
+            }
+
+            // Asyncronous Function to Train the Model
+            async function trainModel(model, inputs, labels, surface) {
+            const batchSize = 100;
+            const epochs = 100;
+            const callbacks = tfvis.show.fitCallbacks(surface, ['loss'], {callbacks:['onEpochEnd']})
+            return await model.fit(inputs, labels,
+                {batchSize, epochs, shuffle:true, callbacks:callbacks}
+            );
+            }
+
+            //Main function
+            async function main() {
+                
+            }
+        </script>
+    </body>
+</html>
