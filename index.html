@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <!-- Load TensorFlow.js. This is required to use coco-ssd model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+    <!-- Load the coco-ssd model. -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+    <head>
+        <title>Object Detection</title>
+    </head>
+    <body>
+        <h1>Object Detection using JavaScript</h1>
+        <input type="file" id="imageUpload" accept="image/*">
+        <img id="preview" style="display: none;">
+        <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">
+        </canvas>
+        <script>
+            document.getElementById("imageUpload").addEventListener("change", (event) => {
+                const file = event.target.files[0];
+
+                if (file) {
+                    const img = document.getElementById("preview");
+                    //Adding image to canvas
+                    const c = document.getElementById("myCanvas");
+                    const ctx = c.getContext("2d");
+                    img.onload = () => {
+                        c.width = img.naturalWidth;
+                        c.height = img.naturalHeight;
+
+                        ctx.drawImage(img, 0, 0);
+                    };
+                    img.src = URL.createObjectURL(file);
+                    cocoSsd.load().then(model => {
+                        model.detect(img).then(predictions => {
+                            predictions.forEach(prediction => {
+                                ctx.beginPath();
+                                ctx.rect(...prediction.bbox);
+                                ctx.lineWidth = 2;
+                                ctx.strokeStyle = 'red';
+                                ctx.fillStyle = 'red';
+                                ctx.stroke();
+
+                                ctx.fillText(
+                                    `${prediction.class} (${(prediction.score * 100).toFixed(2)}%)`,
+                                    prediction.bbox[0],
+                                    prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
+                                );
+                            });
+                        });
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
